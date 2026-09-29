@@ -9,8 +9,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-     "check": "astro check",
-    "astro": "astro"
+    "check": "astro check",
+    "astro": "astro",
+    "lint": "eslint --config src/eslint.config.ts ."
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
@@ -24,7 +25,13 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "typescript": "^6.0.3"
+    "eslint": "^10.11.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "eslint-plugin-jsx-a11y-x": "^0.2.0",
+    "jiti": "^2.7.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vitest": "^5.0.2"
   },
   "allowScripts": {
     "esbuild": true
