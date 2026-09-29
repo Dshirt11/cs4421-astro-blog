@@ -7,8 +7,8 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
-type Props = CollectionEntry<'blog'>['data'] & {
-	author: CollectionEntry<'authors'> | undefined;
+type Props = Omit<CollectionEntry<'blog'>['data'], 'author'> & {
+	author?: CollectionEntry<'authors'>;
 };
 
 const { title, description, pubDate, updatedDate, heroImage, author } = Astro.props;
