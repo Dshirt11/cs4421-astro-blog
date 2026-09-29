@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
-    "lint": "eslint --config src/eslint.config.ts ."
+    "lint": "eslint --config src/eslint.config.ts .",
+    "test:unit": "vitest"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
