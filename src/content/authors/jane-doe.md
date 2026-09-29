@@ -1,6 +1,6 @@
 ---
 name: 'Jane Doe'
-bio: 'Jane is a software engineer who writes about approachable tools, thoughtful systems, and the craft of building for the web.'
+bio: 'Jane Doe is a software engineer writing about Astro, reliable content workflows, and the craft of building thoughtful websites. She enjoys using small, clear schemas to make publishing easier and content more dependable.'
 avatar: '../../assets/blog-placeholder-about.jpg'
 socialLinks:
   - label: 'GitHub'
