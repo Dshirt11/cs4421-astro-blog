@@ -2,6 +2,11 @@ name: Deploy Container to AWS
 on:
   push:
     branches: [main]
+
+concurrency:
+  group: ecs-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
