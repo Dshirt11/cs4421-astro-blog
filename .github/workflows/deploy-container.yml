@@ -1,0 +1,46 @@
+name: Deploy Container to AWS
+on:
+  push:
+    branches: [main]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install app dependencies
+        run: npm ci
+      - name: Run unit tests
+        run: npm run test:unit
+      - name: Build Astro app
+        run: npm run build
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build, Tag & Push Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/astro-blog:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/astro-blog:$IMAGE_TAG
+      - name: Install CDK dependencies
+        run: npm ci
+        working-directory: cdk
+      - name: Build CDK app
+        run: npm run build
+        working-directory: cdk
+      - name: Deploy ECS stack
+        run: npx cdk deploy ECSStack --require-approval never
+        working-directory: cdk
+        env:
+          IMAGE_TAG: ${{ github.sha }}
