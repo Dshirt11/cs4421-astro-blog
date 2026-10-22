@@ -1,17 +1,26 @@
 ---
-title: 'Second post'
-description: 'Lorem ipsum dolor sit amet'
+title: 'The Zweihänder'
+description: 'A zweihänder is a massive two-handed sword developed in Renaissance Europe, known for its exceptional length and reach. Wielded by specialized soldiers, it was designed to break enemy formations and dominate the battlefield.'
 pubDate: 'Jul 15 2022'
 author: 'jane-doe'
-heroImage: '../../assets/blog-placeholder-4.jpg'
+heroImage: '../../assets/Zweihänder.jpg'
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
+The Zweihänder (German pronunciation: [t͡svaɪhɛndɐ], literally "two-hander"), also Doppelhänder ("double-hander"), Beidhänder ("both-hander"), Bihänder, or Bidenhänder, is a large two-handed sword that was used primarily during the 16th century.
 
-Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc. Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra massa massa ultricies mi.
+Zweihänder swords developed from the longswords of the Late Middle Ages and became the hallmark weapon of the German Landsknechte from the time of Maximilian I (d. 1519) and during the Italian Wars of 1494–1559. The Goliath Fechtbuch (1510) shows an intermediate form between longsword and Zweihänder.
 
-Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
+This represented the final stage in the trend of making very large swords, which started in the 14th century, and ended in the 16th century. In its developed form, the Zweihänder acquired the handling characteristics of a polearm rather than a sword due to its increased size and weight, therefore adding to its striking power and longer reach. Consequently, it was not carried in a sheath, but across the shoulder like a pike or halberd.
 
-Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id cursus metus aliquam eleifend mi.
+Due to their length and weight, which was typically at least 1.4 m (4 ft 7 in) and around 2 kg (4.4 lb), Zweihänders required two hands, as the name implies; as such they require at least 25 cm (9.8 in) for the hilt. Zweihänders that were 4 kg (8.8 lb) in weight or more were confined to parade and ceremonial use.
 
-Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
+Early Zweihänders were simply larger versions of longswords. Later examples had Parierhaken ("parrying hooks") at the top of the ricasso as well as side rings on the hilt. Swords continued to be made without one or both features. Some Zweihänders had wavy blades, and were called Flammenschwert.
+
+The Zweihänder is mostly associated with Swiss and German mercenaries known as Landsknechte. While the Swiss outlawed use of the weapon, other Landsknechte kept using it until much later.
+
+It is sometimes claimed that holding the title Meister des langen Schwertes ("Master of the Long Sword"), issued by the Mark Brotherhood, entitled Zweihänder wielders to double pay (Doppelsöldner). However, the veracity of this claim is disputed.
+
+The Black Band of German mercenaries (active during the 1510s and 1520s) included 2,000 two-handed swordsmen in a total strength of 17,000 men. Zweihänder-wielders fought with and against pike formations.
+
+Frisian hero Pier Gerlofs Donia is reputed to have wielded a Zweihänder with such skill, strength and efficiency that he managed to behead several people with it in a single blow. A Zweihänder ascribed to him is, as of 2008, on display in the collection of the Fries Museum. It has a length of 213 cm (84 in) and a mass of about 6.6 kg (15 lb). While it dates to the correct period and was used in battle, there is no documentary link to "Grutte Pier" himself.
+

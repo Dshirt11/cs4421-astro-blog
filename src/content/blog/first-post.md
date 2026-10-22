@@ -1,6 +1,6 @@
 ---
 title: 'The Katana'
-description: 'A Japanese single edged sword'
+description: 'A katana is a traditional Japanese sword with a curved, single-edged blade and a long grip for two-handed use. Renowned for its sharpness, balance, and cutting ability, it was the signature weapon of the samurai and remains a symbol of Japanese martial culture.'
 pubDate: 'Jul 08 2022'
 author: 'jane-doe'
 heroImage: '../../assets/katana1.jpg'
@@ -16,7 +16,7 @@ Katana can also be known as dai or daitō among Western sword enthusiasts, altho
 
 As Japanese does not have separate plural and singular forms, both katanas and katana are considered acceptable forms in English.
 
-Pronounced [katana], the kun'yomi (Japanese reading) of the kanji 刀, originally meaning single edged blade (of any length) in Chinese, the word has been adopted as a loanword by the Portuguese. In Portuguese the designation (spelled catana) means "large knife" or machete.
+The kun'yomi (Japanese reading) of the kanji 刀, originally meaning single edged blade (of any length) in Chinese, the word has been adopted as a loanword by the Portuguese. In Portuguese the designation (spelled catana) means "large knife" or machete.
 
 The katana is generally defined as the standard sized, moderately curved (as opposed to the older tachi featuring more curvature) Japanese sword with a blade length greater than 60.6 cm (23.86 inches) (over 2 shaku). It is characterized by its distinctive appearance: a curved, slender, single-edged blade with a circular or squared guard (tsuba) and long grip to accommodate two hands.
 

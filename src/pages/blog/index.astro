@@ -15,93 +15,48 @@ const posts = (await getCollection('blog')).sort(
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
+		<BaseHead title={`Swords | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
 		<main>
-			<section>
-				<ul>
+			<section class="collection-intro" aria-labelledby="collection-title">
+				<p class="eyebrow">The collection</p>
+				<h1 id="collection-title">Find your blade.</h1>
+				<p>
+					From elegant, single-edged swords to mighty two-handed blades, every weapon has a story.
+					Explore the collection and discover the history behind each one.
+				</p>
+				<p class="collection-count">
+					{posts.length} {posts.length === 1 ? 'sword' : 'swords'} to discover
+				</p>
+			</section>
+
+			<section aria-label="Sword collection">
+				<ul class="sword-grid">
 					{
 						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
+							<li class="sword-card">
+								<a class="card-link" href={`/blog/${post.id}/`}>
+									{post.data.heroImage ? (
+										<div class="image-frame">
+											<Image
+												class="sword-image"
+												width={720}
+												height={360}
+												src={post.data.heroImage}
+												alt=""
+											/>
+										</div>
+									) : (
+										<div class="image-placeholder" aria-hidden="true">✦</div>
 									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
+									<div class="card-content">
+										<p class="date"><FormattedDate date={post.data.pubDate} /></p>
+										<h2 class="title">{post.data.title}</h2>
+										<p class="description">{post.data.description}</p>
+										<span class="read-more">Discover this sword <span aria-hidden="true">→</span></span>
+									</div>
 								</a>
 							</li>
 						))
@@ -112,3 +67,153 @@ const posts = (await getCollection('blog')).sort(
 		<Footer />
 	</body>
 </html>
+
+<style>
+	main {
+		width: 960px;
+		padding-top: 3.5rem;
+		padding-bottom: 5rem;
+	}
+	.collection-intro {
+		max-width: 650px;
+		margin: 0 auto 2.5rem;
+		text-align: center;
+	}
+	.eyebrow {
+		margin: 0 0 0.5rem;
+		color: var(--accent);
+		font-size: 0.8rem;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+	h1 {
+		margin-bottom: 0.75rem;
+		font-size: clamp(2.5rem, 6vw, 3.5rem);
+		letter-spacing: -0.04em;
+	}
+	.collection-intro > p:not(.eyebrow, .collection-count) {
+		margin: 0;
+		font-size: 1.05rem;
+	}
+	.collection-count {
+		display: inline-block;
+		margin: 1.25rem 0 0;
+		padding: 0.3rem 0.75rem;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 999px;
+		color: rgb(var(--gray));
+		font-size: 0.8rem;
+		font-weight: 700;
+	}
+	.sword-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.25rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.sword-card {
+		min-width: 0;
+		overflow: hidden;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 1rem;
+		background: var(--surface);
+		transition: transform 160ms ease, box-shadow 160ms ease;
+	}
+	.sword-card:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--box-shadow);
+	}
+	.card-link {
+		display: flex;
+		height: 100%;
+		flex-direction: column;
+		color: inherit;
+		text-decoration: none;
+	}
+	.card-link:focus-visible {
+		outline: 3px solid var(--accent);
+		outline-offset: -3px;
+		border-radius: 1rem;
+	}
+	.image-frame,
+	.image-placeholder {
+		width: 100%;
+		height: 190px;
+		margin: 0;
+		border-radius: 0;
+		background: var(--surface);
+	}
+	.sword-image {
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		border-radius: 0;
+		object-fit: contain;
+	}
+	.image-placeholder {
+		display: grid;
+		place-items: center;
+		background: rgb(var(--gray-light));
+		color: var(--accent);
+		font-size: 2rem;
+	}
+	.card-content {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 1.25rem;
+	}
+	.date {
+		margin: 0 0 0.4rem;
+		color: rgb(var(--gray));
+		font-size: 0.8rem;
+	}
+	.title {
+		margin: 0;
+		color: rgb(var(--black));
+		font-size: 1.35rem;
+		line-height: 1.25;
+	}
+	.description {
+		margin: 0.6rem 0 1.25rem;
+		color: rgb(var(--gray-dark));
+		font-size: 0.9rem;
+		line-height: 1.5;
+	}
+	.read-more {
+		margin-top: auto;
+		color: var(--accent);
+		font-size: 0.85rem;
+		font-weight: 700;
+	}
+	@media (max-width: 800px) {
+		.sword-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	@media (max-width: 560px) {
+		main {
+			padding-top: 2rem;
+			padding-bottom: 3rem;
+		}
+		.collection-intro {
+			margin-bottom: 1.75rem;
+		}
+		.sword-grid {
+			grid-template-columns: 1fr;
+		}
+		.image-frame,
+		.image-placeholder {
+			height: 220px;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.sword-card {
+			transition: none;
+		}
+	}
+</style>
