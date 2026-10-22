@@ -30,6 +30,9 @@ export class ECSStack extends cdk.Stack {
         cpu: 256,
         memoryLimitMiB: 512,
         desiredCount: 1,
+        minHealthyPercent: 100,
+        maxHealthyPercent: 200,
+        circuitBreaker: { rollback: true },
         publicLoadBalancer: true,
         healthCheckGracePeriod: cdk.Duration.seconds(60),
         taskImageOptions: {
