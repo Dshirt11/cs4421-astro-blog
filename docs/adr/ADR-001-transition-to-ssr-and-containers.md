@@ -1,68 +1,81 @@
 # ADR-001: Transition to SSR and Containers
 
-- **Status:** Accepted; deployment migration in progress
-- **Date:** 2026-10-15
+- **Status:** Accepted; container deployment implemented, static deployment remains active
+- **Decision date:** 2026-10-15
+- **Updated:** 2026-10-22
 
 ## Context
 
 The site was originally deployed as a static Astro build to an S3 bucket behind
-CloudFront. That model serves prebuilt files only; it cannot run server-side
-rendering or handle requests that require a live Node.js process.
+CloudFront. Static hosting serves prebuilt files, but cannot run server-side
+rendering or handle routes that need a live Node.js process.
 
 The application now uses Astro's server output and the `@astrojs/node`
-standalone adapter. This supports server-rendered routes and API endpoints,
-including runtime-dependent responses such as the health endpoint. The
-application therefore needs a server runtime, and a static asset deployment
-alone is no longer a complete deployment model.
-
-The current infrastructure and deployment workflow have not yet completed
-this transition: the CDK stack still deploys `dist` to S3/CloudFront, and the
-GitHub Actions deployment workflow is still configured for a static build.
+standalone adapter. It includes a runtime health endpoint and request logging,
+so production needs a running server as well as static asset delivery.
 
 ## Decision
 
-Deploy the Astro application as a Node.js server packaged in a container:
+Run the Astro application as a Node.js standalone server in a Docker container
+on AWS ECS Fargate. The service is exposed through an Application Load
+Balancer. Static content and dynamic routes are served by the same application
+deployment.
 
-- Build the application with `astro build` using the Node standalone adapter.
-- Package the generated server and its runtime dependencies into a container
-  image.
-- Run that image as a long-lived service on a container runtime that supports
-  HTTP traffic and health checks.
-- Route public web traffic to the service through an HTTPS-capable ingress or
-  load balancer. A CDN may be used for caching static assets, but it must not
-  replace the server origin for dynamic routes.
-- Keep static content and assets in the same application deployment unless a
-  future decision explicitly separates their hosting.
+The implementation uses:
 
-This ADR selects the deployment model, not a specific container orchestrator
-or ingress product. Those infrastructure details should be chosen and recorded
-when the CDK deployment is migrated.
+- `output: 'server'` and the `@astrojs/node` standalone adapter.
+- A multi-stage Docker build, with the generated server started using
+  `node ./dist/server/entry.mjs` on port `4321`.
+- The existing ECR repository `astro-blog`. The container deployment workflow
+  tags images with the Git commit SHA and passes that tag to the CDK deployment
+  through `IMAGE_TAG`.
+- An ECS Fargate service with one desired task, `256` CPU units, and `512` MiB
+  memory, fronted by a public Application Load Balancer. Rolling deployments
+  retain 100% of the desired healthy tasks and allow up to 200% of desired
+  tasks temporarily, so a replacement can pass the load balancer health check
+  before the old task is stopped. The ECS deployment circuit breaker rolls
+  back a deployment if the replacement cannot become healthy.
+- `/api/health` as the ECS target group's health-check path.
+- CloudWatch logs in `/ecs/astro-blog`, retained for one month.
+- A GitHub Actions workflow that builds and tests the application, pushes the
+  image to ECR, and deploys `ECSStack` on pushes to `main`.
+
+## Current deployment status
+
+The container deployment path is implemented in the application, Dockerfile,
+CDK stack, and `deploy-container.yml` workflow.
+
+The previous S3/CloudFront path has not been removed. `StaticSiteStack` and
+`deploy-static.yml` remain configured to deploy on pushes to `main`, separately
+from the ECS workflow. That stack remains a static hosting deployment; it does
+not run the SSR Node.js server. The container service is the deployment target
+for SSR and runtime API routes.
+
+The canonical public URL and whether to retire the static deployment are
+operational decisions that remain to be confirmed. Until then, treat the two
+deployments as separate environments rather than interchangeable origins.
 
 ## Consequences
 
 ### Benefits
 
 - Server-rendered pages and API endpoints can run in production.
-- The build artifact has a defined Node.js runtime and can be deployed
-  consistently across environments.
-- The service can expose runtime health checks and emit application logs.
+- The same application deployment serves the site and its runtime routes.
+- The container image packages the server with its production dependencies.
+- ECS can use the health endpoint to determine whether a task is healthy.
+- Structured request logs are available through the configured CloudWatch log
+  group.
 
 ### Trade-offs
 
-- Production requires a continuously available server process and its
-  supporting container infrastructure.
-- Deployments must build, publish, and run a container image rather than only
-  upload static files.
-- Runtime capacity, availability, health checks, and logging need to be
-  configured and monitored.
-- Dynamic responses cannot be cached as static files without explicit cache
-  policy.
-
-## Migration notes
-
-The Astro configuration already sets `output: 'server'` and uses the
-`@astrojs/node` standalone adapter. The remaining deployment work is to add a
-container image build and update the CDK stack and CI/CD workflow to publish
-and deploy that image to the chosen container runtime. The existing S3 /
-CloudFront static deployment should not be treated as serving the SSR
-application until that work is complete.
+- Production requires a continuously running service and supporting AWS
+  infrastructure, including an Application Load Balancer.
+- The public load balancer currently exposes HTTP; HTTPS requires a TLS
+  certificate and listener configuration.
+- The service's current desired count and task size are fixed in the CDK stack
+  and may need adjustment for production traffic and availability needs.
+- The static and container workflows both run on pushes to `main`, so they can
+  deploy separate versions of the site. The canonical URL and future of the
+  static path should be resolved to avoid operational ambiguity.
+- Dynamic responses must not be cached as static files without an explicit
+  cache policy.
