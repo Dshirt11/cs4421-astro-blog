@@ -13,37 +13,222 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your{' '}
-				<code>astro.config.mjs</code> file. You can customize your setup with{' '}
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to{' '}
-				<a href="https://docs.astro.build/">read the docs</a>{' '}
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out{' '}
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>{' '}
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<section class="welcome" aria-labelledby="welcome-title">
+				<div class="welcome-copy">
+					<p class="eyebrow">Your next adventure starts here</p>
+					<h1 id="welcome-title">Welcome, adventurer.</h1>
+					<p class="intro">
+						Every sword has a story. Discover the blades that shaped history, learn what makes each
+						one unique, and find the right one for your journey.
+					</p>
+					<div class="welcome-actions">
+						<a class="button button-primary" href="/blog">Explore the swords <span aria-hidden="true">→</span></a>
+						<a class="button button-secondary" href="/about">Read my lore</a>
+					</div>
+				</div>
+				<div class="welcome-mark" aria-hidden="true">
+					<svg viewBox="0 0 120 180" fill="none">
+						<path d="M60 12 72 108 60 128 48 108 60 12Z" />
+						<path d="M42 108h36M60 128v24m-11 0h22m-11 0v12" />
+						<circle cx="60" cy="162" r="5" />
+					</svg>
+					<p>A world of blades awaits</p>
+				</div>
+			</section>
+
+			<section class="guide" aria-label="What you can discover">
+				<a class="guide-card" href="/blog">
+					<span class="card-icon" aria-hidden="true">✦</span>
+					<span class="card-title">Meet the swords</span>
+					<span class="card-description">Browse distinctive blades, from the katana to the longsword.</span>
+					<span class="card-link">Explore the collection <span aria-hidden="true">→</span></span>
+				</a>
+				<a class="guide-card" href="/about">
+					<span class="card-icon" aria-hidden="true">✧</span>
+					<span class="card-title">Discover their stories</span>
+					<span class="card-description">Step into the lore and history behind a world of adventure.</span>
+					<span class="card-link">Get to know the guide <span aria-hidden="true">→</span></span>
+				</a>
+			</section>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	main {
+		width: 960px;
+		padding-top: 4rem;
+		padding-bottom: 5rem;
+	}
+	.welcome {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 220px;
+		align-items: center;
+		gap: 3rem;
+		padding: clamp(2rem, 6vw, 4.5rem);
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 1.5rem;
+		background: var(--surface);
+		box-shadow: var(--box-shadow);
+	}
+	.eyebrow {
+		margin: 0 0 0.8rem;
+		color: var(--accent);
+		font-size: 0.8rem;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+	h1 {
+		max-width: 10ch;
+		margin-bottom: 1rem;
+		font-size: clamp(2.5rem, 6vw, 4rem);
+		letter-spacing: -0.04em;
+	}
+	.intro {
+		max-width: 38rem;
+		margin: 0;
+		font-size: 1.1rem;
+	}
+	.welcome-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 2rem;
+	}
+	.button {
+		display: inline-flex;
+		min-height: 2.8rem;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		padding: 0.55rem 1rem;
+		border: 1px solid var(--accent);
+		border-radius: 0.65rem;
+		font-size: 0.9rem;
+		font-weight: 700;
+		text-decoration: none;
+		transition: transform 160ms ease, box-shadow 160ms ease;
+	}
+	.button:hover,
+	.guide-card:hover {
+		transform: translateY(-2px);
+	}
+	.button:focus-visible,
+	.guide-card:focus-visible {
+		outline: 3px solid var(--accent);
+		outline-offset: 3px;
+	}
+	.button-primary {
+		background: var(--accent);
+		color: var(--button-text);
+	}
+	.button-primary:hover {
+		color: var(--button-text);
+		box-shadow: 0 5px 16px rgba(var(--gray), 30%);
+	}
+	.button-secondary {
+		background: transparent;
+		color: rgb(var(--black));
+	}
+	.button-secondary:hover {
+		background: rgb(var(--gray-light));
+		color: rgb(var(--black));
+	}
+	.welcome-mark {
+		display: grid;
+		justify-items: center;
+		gap: 0.75rem;
+		padding: 1.5rem 1rem;
+		border-radius: 1.25rem;
+		background: rgb(var(--gray-light));
+		color: var(--accent);
+	}
+	.welcome-mark svg {
+		width: 110px;
+		height: 165px;
+		stroke: currentColor;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 2.5;
+	}
+	.welcome-mark p {
+		margin: 0;
+		color: rgb(var(--gray-dark));
+		font-size: 0.8rem;
+		font-weight: 700;
+		text-align: center;
+	}
+	.guide {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.25rem;
+		margin-top: 1.5rem;
+	}
+	.guide-card {
+		display: grid;
+		gap: 0.5rem;
+		padding: 1.5rem;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 1rem;
+		background: var(--surface);
+		text-decoration: none;
+		transition: transform 160ms ease, box-shadow 160ms ease;
+	}
+	.guide-card:hover {
+		box-shadow: var(--box-shadow);
+	}
+	.card-icon {
+		color: var(--accent);
+		font-size: 1.4rem;
+	}
+	.card-title {
+		color: rgb(var(--black));
+		font-size: 1.15rem;
+		font-weight: 700;
+	}
+	.card-description {
+		color: rgb(var(--gray-dark));
+		font-size: 0.9rem;
+	}
+	.card-link {
+		margin-top: 0.5rem;
+		color: var(--accent);
+		font-size: 0.85rem;
+		font-weight: 700;
+	}
+	@media (max-width: 640px) {
+		main {
+			padding-top: 2rem;
+			padding-bottom: 3rem;
+		}
+		.welcome {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+		.welcome-mark {
+			grid-row: 1;
+			grid-template-columns: auto 1fr;
+			justify-items: start;
+			align-items: center;
+			padding: 0.75rem 1rem;
+		}
+		.welcome-mark svg {
+			width: 42px;
+			height: 56px;
+		}
+		.welcome-mark p {
+			text-align: left;
+		}
+		.guide {
+			grid-template-columns: 1fr;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.button,
+		.guide-card {
+			transition: none;
+		}
+	}
+</style>
