@@ -6,6 +6,8 @@ import { ECSStack } from '../lib/ECS-stack';
 const app = new cdk.App();
 const env = { account: '830393774434', region: 'us-east-1' };
 
+const ecsStack = new ECSStack(app, 'ECSStack', { env });
+
 new StaticSiteStack(app, 'StaticSiteStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
@@ -18,8 +20,5 @@ new StaticSiteStack(app, 'StaticSiteStack', {
   /* Uncomment the next line if you know exactly what Account and Region you
    * want to deploy the stack to. */
   env,
-
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+  loadBalancer: ecsStack.loadBalancer,
 });
-
-new ECSStack(app, 'ECSStack', { env });
