@@ -1,14 +1,15 @@
-# Welcome to your CDK TypeScript project
+# CDK deployment
 
-This is a blank project for CDK development with TypeScript.
+The `ECSStack` runs the Astro app with server-side rendering. `StaticSiteStack`
+creates a CloudFront distribution in front of the ECS load balancer, so both
+the CloudFront HTTPS URL and the ECS `ServiceUrl` serve the same app.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+From this directory, deploy both stacks with:
 
-## Useful commands
+```sh
+npx cdk deploy --all
+```
 
-* `npm run build`   type-check the project
-* `npm run watch`   watch for changes and type-check
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+After deployment, find the CloudFront URL in the `StaticSiteStack` outputs and
+the direct load-balancer URL in the `ECSStack` outputs. CloudFront forwards
+requests to the app without caching dynamic responses.

@@ -3,8 +3,11 @@ import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ecsPatterns from 'aws-cdk-lib/aws-ecs-patterns';
 import * as logs from 'aws-cdk-lib/aws-logs';
+import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 
 export class ECSStack extends cdk.Stack {
+  public readonly loadBalancer: elbv2.IApplicationLoadBalancer;
+
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -49,6 +52,7 @@ export class ECSStack extends cdk.Stack {
         },
       },
     );
+    this.loadBalancer = service.loadBalancer;
 
     service.targetGroup.configureHealthCheck({
       path: '/api/health',

@@ -1,8 +1,8 @@
 # ADR-001: Transition to SSR and Containers
 
-- **Status:** Accepted; container deployment implemented, static deployment remains active
+- **Status:** Accepted and implemented
 - **Decision date:** 2026-10-15
-- **Updated:** 2026-10-22
+- **Updated:** 2026-10-25
 
 ## Context
 
@@ -37,23 +37,16 @@ The implementation uses:
   back a deployment if the replacement cannot become healthy.
 - `/api/health` as the ECS target group's health-check path.
 - CloudWatch logs in `/ecs/astro-blog`, retained for one month.
+- A CloudFront distribution in front of the ECS load balancer. It forwards all
+  viewer requests, disables response caching, and redirects viewers to HTTPS.
 - A GitHub Actions workflow that builds and tests the application, pushes the
-  image to ECR, and deploys `ECSStack` on pushes to `main`.
+  image to ECR, and deploys both CDK stacks on pushes to `main`.
 
 ## Current deployment status
 
-The container deployment path is implemented in the application, Dockerfile,
-CDK stack, and `deploy-container.yml` workflow.
-
-The previous S3/CloudFront path has not been removed. `StaticSiteStack` and
-`deploy-static.yml` remain configured to deploy on pushes to `main`, separately
-from the ECS workflow. That stack remains a static hosting deployment; it does
-not run the SSR Node.js server. The container service is the deployment target
-for SSR and runtime API routes.
-
-The canonical public URL and whether to retire the static deployment are
-operational decisions that remain to be confirmed. Until then, treat the two
-deployments as separate environments rather than interchangeable origins.
+The CloudFront distribution and direct Application Load Balancer URL both
+serve the same SSR application. `deploy-container.yml` deploys the ECS stack
+first and then the CloudFront stack on pushes to `main`.
 
 ## Consequences
 
@@ -74,8 +67,8 @@ deployments as separate environments rather than interchangeable origins.
   certificate and listener configuration.
 - The service's current desired count and task size are fixed in the CDK stack
   and may need adjustment for production traffic and availability needs.
-- The static and container workflows both run on pushes to `main`, so they can
-  deploy separate versions of the site. The canonical URL and future of the
-  static path should be resolved to avoid operational ambiguity.
+- CloudFront forwards requests to the public load balancer over HTTP. The
+  viewer-facing CloudFront URL uses HTTPS; direct load-balancer access remains
+  HTTP unless a TLS listener is configured on the load balancer.
 - Dynamic responses must not be cached as static files without an explicit
   cache policy.
