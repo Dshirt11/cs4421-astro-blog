@@ -1,15 +1,22 @@
 # CDK deployment
 
-The `ECSStack` runs the Astro app with server-side rendering. `StaticSiteStack`
-creates a CloudFront distribution in front of the ECS load balancer, so both
-the CloudFront HTTPS URL and the ECS `ServiceUrl` serve the same app.
+`ECSStack` runs the Astro SSR application on ECS Fargate. `StaticSiteStack`
+places CloudFront in front of its load balancer, so both the CloudFront URL and
+the direct service URL serve the same application.
 
-From this directory, deploy both stacks with:
+Deploy both stacks from this directory:
 
 ```sh
 npx cdk deploy --all
 ```
 
-After deployment, find the CloudFront URL in the `StaticSiteStack` outputs and
-the direct load-balancer URL in the `ECSStack` outputs. CloudFront forwards
-requests to the app without caching dynamic responses.
+## Health checks and rollback
+
+The load balancer checks `/api/health` and accepts only HTTP 200. The
+`AstroUnhealthyTarget` CloudWatch alarm fires when at least one target is
+unhealthy. ECS monitors that alarm during deployments and rolls back to the
+previous task definition if it enters ALARM; the ECS deployment circuit
+breaker is enabled as an additional failure guard.
+
+Rollback starts automatically, but restoring a healthy target can take
+minutes. Do not treat the rollback as an instantaneous seconds-level recovery.

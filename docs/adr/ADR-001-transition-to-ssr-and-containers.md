@@ -36,6 +36,11 @@ The implementation uses:
   before the old task is stopped. The ECS deployment circuit breaker rolls
   back a deployment if the replacement cannot become healthy.
 - `/api/health` as the ECS target group's health-check path.
+- The target group accepts only HTTP 200. A CloudWatch alarm watches
+  `UnHealthyHostCount`; ECS deployment alarms and the deployment circuit
+  breaker both roll back failed deployments.
+- A CloudFront distribution in front of the load balancer, forwarding all
+  methods without caching responses.
 - CloudWatch logs in `/ecs/astro-blog`, retained for one month.
 - A CloudFront distribution in front of the ECS load balancer. It forwards all
   viewer requests, disables response caching, and redirects viewers to HTTPS.
@@ -44,9 +49,9 @@ The implementation uses:
 
 ## Current deployment status
 
-The CloudFront distribution and direct Application Load Balancer URL both
-serve the same SSR application. `deploy-container.yml` deploys the ECS stack
-first and then the CloudFront stack on pushes to `main`.
+CloudFront and the direct load-balancer URL serve the same SSR application.
+`deploy-container.yml` builds the container and deploys both stacks on pushes
+to `main`; the separate static-site workflow has been removed.
 
 ## Consequences
 
@@ -63,12 +68,11 @@ first and then the CloudFront stack on pushes to `main`.
 
 - Production requires a continuously running service and supporting AWS
   infrastructure, including an Application Load Balancer.
-- The public load balancer currently exposes HTTP; HTTPS requires a TLS
-  certificate and listener configuration.
+- CloudFront terminates viewer HTTPS and connects to the public load balancer
+  over HTTP. Direct load-balancer access remains HTTP.
 - The service's current desired count and task size are fixed in the CDK stack
   and may need adjustment for production traffic and availability needs.
-- CloudFront forwards requests to the public load balancer over HTTP. The
-  viewer-facing CloudFront URL uses HTTPS; direct load-balancer access remains
-  HTTP unless a TLS listener is configured on the load balancer.
+- Rollback is automatic on unhealthy-target alarms, but full recovery and
+  target deregistration can take minutes rather than seconds.
 - Dynamic responses must not be cached as static files without an explicit
   cache policy.

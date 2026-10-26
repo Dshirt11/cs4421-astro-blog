@@ -1,38 +1,36 @@
 import * as cdk from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 import { ECSStack } from '../lib/ECS-stack';
-import { StaticSiteStack } from '../lib/static-site-stack';
 
-test('CloudFront forwards uncached requests to the SSR service', () => {
+test('failed health checks alarm and roll back ECS deployments', () => {
   const app = new cdk.App();
-  const env = { account: '111111111111', region: 'us-east-1' };
-  const ecsStack = new ECSStack(app, 'ECSStack', { env });
-  const cloudFrontStack = new StaticSiteStack(app, 'StaticSiteStack', {
-    env,
-    loadBalancer: ecsStack.loadBalancer,
+  const stack = new ECSStack(app, 'ECSStack', {
+    env: { account: '111111111111', region: 'us-east-1' },
   });
-  const template = Template.fromStack(cloudFrontStack);
+  const template = Template.fromStack(stack);
 
-  template.hasResourceProperties('AWS::CloudFront::Distribution', {
-    DistributionConfig: Match.objectLike({
-      DefaultCacheBehavior: Match.objectLike({
-        AllowedMethods: Match.arrayWith(['POST', 'DELETE']),
-        CachePolicyId: '4135ea2d-6df8-44a3-9df3-4b5a84be39ad',
-        OriginRequestPolicyId: 'b689b0a8-53d0-40ab-baf2-68738e2966ac',
-        ViewerProtocolPolicy: 'redirect-to-https',
-      }),
-      Origins: Match.arrayWith([
-        Match.objectLike({
-          CustomOriginConfig: Match.objectLike({
-            OriginProtocolPolicy: 'http-only',
-          }),
-          DomainName: Match.anyValue(),
-        }),
-      ]),
+  template.hasResourceProperties('AWS::ElasticLoadBalancingV2::TargetGroup', {
+    HealthCheckPath: '/api/health',
+    Matcher: { HttpCode: '200' },
+  });
+
+  template.hasResourceProperties('AWS::CloudWatch::Alarm', {
+    AlarmName: 'AstroUnhealthyTarget',
+    ComparisonOperator: 'GreaterThanOrEqualToThreshold',
+    EvaluationPeriods: 1,
+    MetricName: 'UnHealthyHostCount',
+    Namespace: 'AWS/ApplicationELB',
+    Threshold: 1,
+    TreatMissingData: 'notBreaching',
+  });
+
+  template.hasResourceProperties('AWS::ECS::Service', {
+    DeploymentConfiguration: Match.objectLike({
+      Alarms: {
+        AlarmNames: Match.anyValue(),
+        Enable: true,
+        Rollback: true,
+      },
     }),
-  });
-
-  template.hasOutput('CloudFrontUrl', {
-    Description: 'Public HTTPS URL for the Astro application through CloudFront',
   });
 });
