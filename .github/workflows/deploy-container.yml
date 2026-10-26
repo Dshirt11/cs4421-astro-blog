@@ -1,4 +1,4 @@
-name: Deploy Container to AWS
+name: Deploy Astro App to AWS
 on:
   push:
     branches: [main]
@@ -44,8 +44,8 @@ jobs:
       - name: Build CDK app
         run: npm run build
         working-directory: cdk
-      - name: Deploy ECS stack
-        run: npx cdk deploy ECSStack --require-approval never
+      - name: Deploy ECS and CloudFront stacks
+        run: npx cdk deploy --all --require-approval never
         working-directory: cdk
         env:
           IMAGE_TAG: ${{ github.sha }}
