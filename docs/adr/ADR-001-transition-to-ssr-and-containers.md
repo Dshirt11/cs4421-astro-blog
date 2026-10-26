@@ -42,6 +42,8 @@ The implementation uses:
 - A CloudFront distribution in front of the load balancer, forwarding all
   methods without caching responses.
 - CloudWatch logs in `/ecs/astro-blog`, retained for one month.
+- A CloudFront distribution in front of the ECS load balancer. It forwards all
+  viewer requests, disables response caching, and redirects viewers to HTTPS.
 - A GitHub Actions workflow that builds and tests the application, pushes the
   image to ECR, and deploys both CDK stacks on pushes to `main`.
 
