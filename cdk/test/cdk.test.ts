@@ -1,17 +1,36 @@
-// // import * as cdk from 'aws-cdk-lib/core';
-// // import { Template } from 'aws-cdk-lib/assertions';
-// // import * as Cdk from '../lib/cdk-stack';
+import * as cdk from 'aws-cdk-lib';
+import { Match, Template } from 'aws-cdk-lib/assertions';
+import { ECSStack } from '../lib/ECS-stack';
 
-// // example test. To run these tests, uncomment this file along with the
-// // example resource in lib/cdk-stack.ts
-// test('SQS Queue Created', () => {
-// //   const app = new cdk.App();
-// //     // WHEN
-// //   const stack = new Cdk.CdkStack(app, 'MyTestStack');
-// //     // THEN
-// //   const template = Template.fromStack(stack);
+test('failed health checks alarm and roll back ECS deployments', () => {
+  const app = new cdk.App();
+  const stack = new ECSStack(app, 'ECSStack', {
+    env: { account: '111111111111', region: 'us-east-1' },
+  });
+  const template = Template.fromStack(stack);
 
-// //   template.hasResourceProperties('AWS::SQS::Queue', {
-// //     VisibilityTimeout: 300
-// //   });
-// });
+  template.hasResourceProperties('AWS::ElasticLoadBalancingV2::TargetGroup', {
+    HealthCheckPath: '/api/health',
+    Matcher: { HttpCode: '200' },
+  });
+
+  template.hasResourceProperties('AWS::CloudWatch::Alarm', {
+    AlarmName: 'AstroUnhealthyTarget',
+    ComparisonOperator: 'GreaterThanOrEqualToThreshold',
+    EvaluationPeriods: 1,
+    MetricName: 'UnHealthyHostCount',
+    Namespace: 'AWS/ApplicationELB',
+    Threshold: 1,
+    TreatMissingData: 'notBreaching',
+  });
+
+  template.hasResourceProperties('AWS::ECS::Service', {
+    DeploymentConfiguration: Match.objectLike({
+      Alarms: {
+        AlarmNames: Match.anyValue(),
+        Enable: true,
+        Rollback: true,
+      },
+    }),
+  });
+});
